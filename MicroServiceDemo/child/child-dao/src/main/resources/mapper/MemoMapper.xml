@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+  PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+  "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="csl.demo.dao.MemoMapper">
+
+	<select id="queryMemo" parameterType="string" resultType="hashmap">
+		select * from memo where uuid in
+		<foreach item="item" collection="array" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</select>
+	
+	<insert id="addMemo" parameterType="list">
+		insert into memo(uuid,content,topic) values
+		<foreach item="item" collection="list" open="" close="" separator=",">
+			(#{item.uuid},#{item.content},#{item.topic})
+		</foreach>
+	</insert>
+	
+	<delete id="delMemo" parameterType="string">
+		delete from memo where uuid in
+		<foreach item="item" collection="array" open="(" close=")" separator=",">
+			#{item}
+		</foreach>
+	</delete>
+	
+	<update id="updateMemo" parameterType="list">
+<!-- 		update memo
+		<trim prefix="set" suffix="">
+			<trim prefix="content = case " suffix="end,">
+				<foreach item="item" collection="list" open="(" close=")" separator=",">
+					<if test="item.content != '' and item.content != null">
+						when uuid = #{item.uuid} then #{item.content}
+					</if>
+				</foreach>
+			</trim>
+			<trim prefix="topic = case " suffix="end">
+				<foreach item="item" collection="list" open="(" close=")" separator=",">
+					<if test="item.topic != '' and item.topic != null">
+						when uuid = #{item.uuid} then #{item.topic}
+					</if>
+				</foreach>
+			</trim>
+		</trim>
+		where
+		<foreach item="item" collection="list" separator="or">
+			uuid = #{item.uuid} 
+		</foreach> -->
+		<foreach item="item" collection="list" separator=";">
+			update memo 
+			<set>
+				<if test="item.content != '' and item.content != null">
+					content = #{item.content},
+				</if>
+				<if test="item.topic != '' and item.topic != null">
+					topic = #{item.topic},
+				</if>
+			</set>
+			where uuid = #{item.uuid}
+		</foreach>
+	</update>
+</mapper>
