@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+        "-//Apache Software Foundation//DTD Struts Configuration 2.5//EN"
+        "http://struts.apache.org/dtds/struts-2.5.dtd">
+<struts>
+	<!-- 声明spring处理struts -->
+	<constant name="struts-ObjectFactory" value="spring" />
+	<!-- <constant name="struts.enable.DynamicMethodInvocation" value="true" /> -->
+	<!-- struts2的action必须放在一个指定的包空间下定义 -->
+	<package name="com.csl.action" namespace="/" extends="struts-default">
+		<global-allowed-methods>show,show2,show3,show4</global-allowed-methods>
+		<action name="test_*" class="testAction" method="{1}"/>
+		<action name="test2" class="actionAnno" />
+	</package>
+</struts>    
